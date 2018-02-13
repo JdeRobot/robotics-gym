@@ -45,14 +45,9 @@ class GazeboEnv(gym.Env):
             sys.exit(-1)
 
     def _step(self, action):
-
-        # Implement this method in every subclass
-        # Perform a step in gazebo. E.g. move the robot
         raise NotImplementedError
 
     def _reset(self):
-
-        # Implemented in subclass
         raise NotImplementedError
 
     def _render(self, mode="human", close=False):
@@ -115,14 +110,7 @@ class GazeboEnv(gym.Env):
                 logger.warning("GazeboEnv: exception raised executing killall command for roscore {}".format(ce))
 
     def _configure(self):
-
-        # TODO
-        # From OpenAI API: Provides runtime configuration to the enviroment
-        # Maybe set the Real Time Factor?
         pass
 
     def _seed(self):
-
-        # TODO
-        # From OpenAI API: Sets the seed for this env's random number generator(s)
         pass

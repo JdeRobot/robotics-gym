@@ -10,6 +10,6 @@ if __name__ == '__main__':
     specs.environment_specs.launchfile = 'turtlebot2_octa.launch'
     # specs.environment_specs.launchfile = 'turtlebot2_rect.launch'
     env = gym.make('Turtlebot2LaserEnv-v0')
-    # state = env.reset()
+    state = env.reset()
     time.sleep(30)
     env.close()

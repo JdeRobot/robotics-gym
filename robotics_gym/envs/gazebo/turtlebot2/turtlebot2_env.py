@@ -81,19 +81,10 @@ class Turtlebot2Env(gazebo_env.GazeboEnv):
     def get_camera_data(self, timeout=5):
         image_data = None
         cv_image = None
-        # success=False
         while image_data is None:
             try:
                 image_data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=timeout)
-                # h = image_data.height
-                # w = image_data.width
                 cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
-                #temporal fix, check image is not corrupted
-                # if not (cv_image[h/2,w/2,0]==178 and cv_image[h/2,w/2,1]==178 and cv_image[h/2,w/2,2]==178):
-                #     success = True
-                # else:
-                #     pass
-                #     #print("/camera/rgb/image_raw ERROR, retrying")
             except Exception as e:
                 logger.warning("Turtlebot2Env: exception raised getting camera data {}".format(e))
 
