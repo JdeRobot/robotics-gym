@@ -1,0 +1,14 @@
+*.swp
+*.pyc
+*.py~
+.DS_Store
+
+# Virtualenv
+/env
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+
+# PyCharm project files
+.idea
+vizdoom.ini
