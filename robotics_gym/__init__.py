@@ -27,3 +27,21 @@ register(
     entry_point='robotics_gym.envs.player_stage:WorldPlayerStageEnv',
     # More arguments here
 )
+
+register(
+    id='SimpleRoomsEnv-v0',
+    entry_point='robotics_gym.envs.grid_worlds:SimpleRoomsEnv',
+    # More arguments here
+)
+
+register(
+    id='CliffWalkingEnv-v0',
+    entry_point='robotics_gym.envs.grid_worlds:CliffWalkingEnv',
+    # More arguments here
+)
+
+register(
+    id='WindyGridworldEnv-v0',
+    entry_point='robotics_gym.envs.grid_worlds:WindyGridworldEnv',
+    # More arguments here
+)
