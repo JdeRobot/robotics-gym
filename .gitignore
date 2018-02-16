@@ -3,7 +3,8 @@
 *.py~
 .DS_Store
 .vscode
-
+/dist
+/build
 # Virtualenv
 /env
 
