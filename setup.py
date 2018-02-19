@@ -12,5 +12,5 @@ setup(name='robotics-gym',
       url='https://github.com/JdeRobot/robotics-gym',
       author='JdeRobot',
       packages = find_packages(),
-      package_data={'robotics-gym': ['envs/gazebo/assets/launch/*.launch', 'envs/gazebo/assets/worlds/*']},
+      package_data={'robotics-gym/robotics_gym': ['envs/gazebo/assets/launch/*.launch', 'envs/gazebo/assets/worlds/*']},
 )
