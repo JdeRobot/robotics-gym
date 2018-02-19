@@ -1,7 +1,7 @@
 import logging
 import os
 from gym.envs.registration import register
-from gym import logger
+logger = logging.getLogger(__name__)
 
 # Check ROS envrionment
 if "ROS_MASTER_URI" not in os.environ:
