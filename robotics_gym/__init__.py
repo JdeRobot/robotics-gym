@@ -1,7 +1,12 @@
 import logging
 import os
 from gym.envs.registration import register
-logger = logging.getLogger(__name__)
+from gym import logger
+
+# Check ROS envrionment
+if "ROS_MASTER_URI" not in os.environ:
+    logger.warning("ROS_MASTER_URI not found. Have you initialize ROS environment?")
+
 # Gazebo
 # ----------------------------------------
 
