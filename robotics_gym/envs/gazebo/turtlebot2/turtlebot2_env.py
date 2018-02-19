@@ -27,7 +27,7 @@ class Turtlebot2Env(gazebo_env.GazeboEnv):
             else:
                 msg = "Turtlebot2Env: launcfile {} does not exists".format(os.path.exists(specs.environment_specs.launchfile))
                 logger.error(msg)
-                raise ValueEError(msg)
+                raise ValueError(msg)
         else:
             launchfile = "/opt/ros/kinetic/share/turtlebot_gazebo/launch/turtlebot_world.launch"
 
