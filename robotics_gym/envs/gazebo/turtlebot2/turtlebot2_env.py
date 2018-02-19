@@ -12,8 +12,9 @@ from robotics_gym.envs import gazebo_env
 from robotics_gym.envs import specs
 
 from gym.utils import seeding
-from gym import logger
+import logging
 
+logger = logging.getLogger(__name__)
 
 class Turtlebot2Env(gazebo_env.GazeboEnv):
 

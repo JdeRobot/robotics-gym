@@ -1,9 +1,11 @@
 import os
 import sys
 import gym
-from gym import logger
+import logging
 import rospy
 import subprocess
+
+logger = logging.getLogger(__name__)
 
 class GazeboEnv(gym.Env):
 
