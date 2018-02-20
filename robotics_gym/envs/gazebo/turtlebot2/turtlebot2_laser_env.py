@@ -53,11 +53,8 @@ class Turtlebot2LaserEnv(turtlebot2_env.Turtlebot2Env):
 
     def update(self):
         laser = self.get_laser_data()
-        self.collision = False
-        if np.min(laser) < self.obstacle_thresold:
-            self.collision = True
         self.laser = laser.ranges
         self.time_stamp = laser.scan_time
-
-
-
+        self.collision = False
+        if np.min(self.laser) < self.obstacle_thresold:
+            self.collision = True
