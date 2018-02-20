@@ -14,7 +14,7 @@ class Turtlebot2LaserEnv(turtlebot2_env.Turtlebot2Env):
         self.laser = np.zeros(self.observation_dims, np.float32)
         self.action_space = spaces.Discrete(3)
         self.collision = False
-        self.obstacle_thresold = 0.5
+        self.obstacle_thresold = 0.15
         self.time_stamp = laser.scan_time
 
     def _step(self, action):

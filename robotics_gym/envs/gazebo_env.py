@@ -24,7 +24,8 @@ class GazeboEnv(gym.Env):
             logger.info("GazeboEnv: launch file {}".format(launch_file))
 
         try:
-            subprocess.Popen(["roscore", "-p", port])
+            with open(".roscore_stdout.log", "w") as out, open(".roscore_stderr.log", "w") as err:
+                subprocess.Popen(["roscore", "-p", port], stdout=out, stderr=err)
             logger.info("GazeboEnv: roscore launched.")
         except OSError as oe:
             logger.error("GazeboEnv: exception raised launching roscore. {}".format(oe))
@@ -39,7 +40,8 @@ class GazeboEnv(gym.Env):
             sys.exit(-1)
 
         try:
-            subprocess.Popen(["roslaunch", "-p", port, launch_file])
+            with open(".roslaunch_stdout.log", "w") as out, open(".roslaunch_stderr.log", "w") as err:
+                subprocess.Popen(["roslaunch", "-p", port, launch_file], stdout=out, stderr=err)
             logger.info("GazeboEnv: gzserver launched.")
         except OSError as oe:
             logger.error("GazeboEnv: exception raised launching gzserver. {}".format(oe))
