@@ -1,1 +1,2 @@
 from robotics_gym.envs.gazebo.turtlebot.turtlebot2_laser_env import Turtlebot2LaserEnv
+from robotics_gym.envs.gazebo.turtlebot.turtlebot3_laser_env import Turtlebot3LaserEnv
