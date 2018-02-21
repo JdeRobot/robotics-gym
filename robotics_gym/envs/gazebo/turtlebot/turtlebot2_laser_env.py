@@ -1,23 +1,21 @@
 import numpy as np
 from gym import spaces
 
-import turtlebot2_env
+import turtlebot_env
 
-class Turtlebot2Laser2DEnv(turtlebot2_env.Turtlebot2Env):
+class Turtlebot2LaserEnv(turtlebot_env.TurtlebotEnv):
 
     def __init__(self):
-        turtlebot2_env.Turtlebot2Env.__init__(self)
+        turtlebot_env.TurtlebotEnv.__init__(self)
 
         laser = self.get_laser_data()
-        self.observation_dims = [len(laser.ranges), len(laser.ranges)]
-        self.observation_space = spaces.Box(low=0, high=255, shape=( self.observation_dims[0], self.observation_dims[1], 1))
-        self.screen = np.zeros((self.observation_dims[0], self.observation_dims[1]), np.uint8)
+        self.observation_dims = [len(laser.ranges)]
+        self.observation_space = spaces.Discrete(self.observation_dims)
+        self.laser = np.zeros(self.observation_dims, np.float32)
         self.action_space = spaces.Discrete(3)
         self.collision = False
-        self.viewer = None
-        self.obstacle_thresold = 0.5
+        self.obstacle_thresold = 0.15
         self.time_stamp = laser.scan_time
-        self.frames_skip = 0
 
     def _step(self, action):
         self.action2vel(action)
@@ -32,7 +30,7 @@ class Turtlebot2Laser2DEnv(turtlebot2_env.Turtlebot2Env):
             else:
                 reward = -0.003
         info = {}
-        return self.screen, reward, self.collision, info
+        return self.laser, reward, self.collision, info
 
     def _reset(self):
 
@@ -40,7 +38,7 @@ class Turtlebot2Laser2DEnv(turtlebot2_env.Turtlebot2Env):
         self.reset_simulation()
         self.update()
 
-        return self.screen, 0.0
+        return self.laser, 0.0
 
     def action2vel(self, action):
         action -= 1
@@ -55,16 +53,8 @@ class Turtlebot2Laser2DEnv(turtlebot2_env.Turtlebot2Env):
 
     def update(self):
         laser = self.get_laser_data()
-
-        while self.time_stamp == laser.scan_time:
-            pass
-
-        self.collision = False
-        if np.min(laser) < self.obstacle_thresold:
-            self.collision = True
-
-        for i in range(len(laser.values)):
-            value = int((laser.values[i] / 10.0) * self.observation_dims[1])
-            self.screen[i] = np.concatenate((np.ones(value) * 255, np.zeros(180 - value)))
-
+        self.laser = laser.ranges
         self.time_stamp = laser.scan_time
+        self.collision = False
+        if np.min(self.laser) < self.obstacle_thresold:
+            self.collision = True

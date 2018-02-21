@@ -16,9 +16,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class Turtlebot2Env(gazebo_env.GazeboEnv):
+class TurtlebotEnv(gazebo_env.GazeboEnv):
 
     def __init__(self):
+
+        if "TURTLEBOT3_MODEL" not in os.environ:
+            self.turtlebot_version = 2
+        else:
+            self.turtlebot_version = 3
 
         if 'launchfile' in specs.environment_specs:
             if os.path.exists(specs.environment_specs.launchfile):
@@ -26,11 +31,14 @@ class Turtlebot2Env(gazebo_env.GazeboEnv):
             elif os.path.exists(os.path.join(os.path.dirname(os.path.realpath(gazebo_env.__file__)),'gazebo/assets/launch/{}'.format(specs.environment_specs.launchfile))):
                 launchfile = os.path.join(os.path.dirname(os.path.realpath(gazebo_env.__file__)),'gazebo/assets/launch/{}'.format(specs.environment_specs.launchfile))
             else:
-                msg = "Turtlebot2Env: launcfile {} does not exists".format(os.path.exists(specs.environment_specs.launchfile))
+                msg = "TurtlebotEnv: launcfile {} does not exists".format(os.path.exists(specs.environment_specs.launchfile))
                 logger.error(msg)
                 raise ValueError(msg)
         else:
-            launchfile = "/opt/ros/kinetic/share/turtlebot_gazebo/launch/turtlebot_world.launch"
+            if self.turtlebot_version == 2:
+                launchfile = "/opt/ros/kinetic/share/turtlebot_gazebo/launch/turtlebot_world.launch"
+            else:
+                launchfile = "/opt/ros/kinetic/share/turtlebot3_gazebo/launch/turtlebot3_world.launch"                
 
         if 'port' in specs.environment_specs:
             port = specs.environment_specs.port
@@ -39,7 +47,11 @@ class Turtlebot2Env(gazebo_env.GazeboEnv):
             gazebo_env.GazeboEnv.__init__(self, launchfile)
 
 
-        self.vel_pub_service = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=5)
+        if self.turtlebot_version == 3:
+            self.vel_pub_service = rospy.Publisher('/cmd_vel', Twist, queue_size=5)
+        else:
+            self.vel_pub_service = rospy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=5)    
+
         self.unpause_service = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause_service = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_service = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
@@ -53,21 +65,21 @@ class Turtlebot2Env(gazebo_env.GazeboEnv):
         try:
             self.reset_service()
         except rospy.ServiceException as e:
-            logger.warning("Turtlebot2Env: exception raised reset simulation {}".format(e))
+            logger.warning("TurtlebotEnv: exception raised reset simulation {}".format(e))
 
     def pause_physics(self):
         rospy.wait_for_service('/gazebo/pause_physics')
         try:
             self.pause_service()
         except rospy.ServiceException as e:
-            logger.warning("Turtlebot2Env: exception raised pause physics {}".format(e))
+            logger.warning("TurtlebotEnv: exception raised pause physics {}".format(e))
 
     def unpause_physics(self):
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
             self.unpause_service()
         except rospy.ServiceException as e:
-            logger.warning("Turtlebot2Env: exception raised unpause physics {}".format(e))
+            logger.warning("TurtlebotEnv: exception raised unpause physics {}".format(e))
 
     def get_laser_data(self, timeout=5):
         data = None
@@ -75,11 +87,14 @@ class Turtlebot2Env(gazebo_env.GazeboEnv):
             try:
                 data = rospy.wait_for_message('/scan', LaserScan, timeout=timeout)
             except Exception as e:
-                logger.warning("Turtlebot2Env: exception raised getting laser data {}".format(e))
+                logger.warning("TurtlebotEnv: exception raised getting laser data {}".format(e))
 
         return data
 
     def get_camera_data(self, timeout=5):
+        if self.turtlebot_version == 3:
+            raise NotImplementedError
+            
         image_data = None
         cv_image = None
         while image_data is None:
@@ -87,7 +102,7 @@ class Turtlebot2Env(gazebo_env.GazeboEnv):
                 image_data = rospy.wait_for_message('/camera/rgb/image_raw', Image, timeout=timeout)
                 cv_image = CvBridge().imgmsg_to_cv2(image_data, "bgr8")
             except Exception as e:
-                logger.warning("Turtlebot2Env: exception raised getting camera data {}".format(e))
+                logger.warning("TurtlebotEnv: exception raised getting camera data {}".format(e))
 
         return cv_image
 

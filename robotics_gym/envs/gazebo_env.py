@@ -70,7 +70,7 @@ class GazeboEnv(gym.Env):
                 logger.warning("GazeboEnv: exception raised executing killall command for gzclient {}".format(ce))
             return
 
-        if ps_output.count('gzclient') < 1:
+        if mode == 'human' and ps_output.count('gzclient') < 1:
             try:
                 subprocess.Popen(["gzclient"])
                 logger.info("GazeboEnv: gzclient launched.")

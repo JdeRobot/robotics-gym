@@ -13,13 +13,19 @@ if "ROS_MASTER_URI" not in os.environ:
 # Turtlebot envs
 register(
     id='Turtlebot2LaserEnv-v0',
-    entry_point='robotics_gym.envs.gazebo.turtlebot2:Turtlebot2LaserEnv',
+    entry_point='robotics_gym.envs.gazebo.turtlebot:Turtlebot2LaserEnv',
+    # More arguments here
+)
+
+register(
+    id='Turtlebot3LaserEnv-v0',
+    entry_point='robotics_gym.envs.gazebo.turtlebot:Turtlebot3LaserEnv',
     # More arguments here
 )
 
 register(
     id='Turtlebot2Laser2DEnv-v0',
-    entry_point='robotics_gym.envs.gazebo.turtlebot2:Turtlebot2Laser2DEnv',
+    entry_point='robotics_gym.envs.gazebo.turtlebot:Turtlebot2Laser2DEnv',
     # More arguments here
 )
 
